@@ -1,0 +1,129 @@
+/* src/pages/Shop.css */
+
+.shop-page {
+    max-width: 1200px;
+    margin: 120px auto 40px;
+    /* margin-top adjusted because navbar is fixed */
+    padding: 0 2rem;
+}
+
+
+/* Add this to your existing Shop.css */
+
+.shop-content+.shop-content {
+    margin-top: 4rem;
+}
+
+.shop-header {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.shop-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.shop-header p {
+    color: #a77b5a;
+    font-weight: 500;
+}
+
+.shop-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.shop-image img {
+    width: 400px;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.shop-details {
+    flex: 1;
+}
+
+.product-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.product-price {
+    color: #a77b5a;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.product-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: #555;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.quantity-selector span {
+    margin-right: 1rem;
+    font-weight: 500;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.quantity-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #a77b5a;
+}
+
+.coming-soon-btn {
+    background-color: #eee;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #bbb;
+    cursor: not-allowed;
+    border-radius: 5px;
+}
+
+.add-to-cart-btn {
+    background-color: #a77b5a;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-weight: bold;
+    font-size: 1rem;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #8c6347;
+}
+
+.add-to-cart-btn svg {
+    font-size: 1.1rem;
+}

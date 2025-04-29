@@ -1,0 +1,132 @@
+/* src/components/CartPopup.css */
+
+.cart-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: flex-end;
+    z-index: 2000;
+}
+
+.cart-popup {
+    width: 400px;
+    height: 100vh;
+    background-color: white;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.cart-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-popup-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.cart-items {
+    margin-bottom: 20px;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+.cart-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.item-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.item-info h3 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.quantity-control button {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.quantity-control span {
+    margin: 0 10px;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: #ff4757;
+    cursor: pointer;
+    text-align: left;
+    padding: 0;
+}
+
+.cart-total {
+    margin: 20px 0;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #a77b5a;
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.checkout-btn:hover {
+    background-color: #8c6347;
+}
+
+@media (max-width: 500px) {
+    .cart-popup {
+        width: 100%;
+    }
+}
