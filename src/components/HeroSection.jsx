@@ -22,7 +22,7 @@ const HeroSection = () => {
         muted
         className={`hero-video ${showVideo ? 'visible' : 'hidden'}`}
       >
-        <source src="/public/video/fragrance.mp4" type="video/mp4" />
+        <source src="/video/fragrance.mp4" type="video/mp4" />
       </video>
       <div className={`hero-image ${!showVideo ? 'visible' : 'hidden'}`}></div>
       <div className="overlay">
