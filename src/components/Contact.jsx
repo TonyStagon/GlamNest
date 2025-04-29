@@ -22,18 +22,18 @@ const Contact = () => {
         
         <div className="contact-content">
           {/* Contact Form (always visible) */}
-          <form className="contact-form">
+          <form className="contact-form" action="https://formsubmit.co/tutarthurs@gmail.com" method="POST">
             <div className="form-group">
               <label>Name</label>
-              <input type="text" required />
+              <input type="text" name="name" required />
             </div>
             <div className="form-group">
               <label>Email</label>
-              <input type="email" required />
+              <input type="email" name="email" required />
             </div>
             <div className="form-group">
               <label>Message</label>
-              <textarea rows="4" required></textarea>
+              <textarea rows="4" name="message" required></textarea>
             </div>
             <button type="submit" className="submit-btn">SEND MESSAGE</button>
           </form>

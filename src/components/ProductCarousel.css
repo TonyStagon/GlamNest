@@ -185,6 +185,9 @@
         width: 100%;
         margin-bottom: 2rem;
     }
+    .slide-content p {
+        display: none;
+    }
     .slide-image {
         width: 100%;
         height: 50%;
