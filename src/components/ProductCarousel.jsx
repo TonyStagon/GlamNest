@@ -13,7 +13,7 @@ const ProductCarousel = () => {
       subtitle: "CANDLES",
       description: "TRANSFORM YOUR SPACE WITH OUR LUXURIOUS CANDLES, DESIGNED TO CREATE AN INVITING ATMOSPHERE. EXPERIENCE A BLEND OF CAPTIVATING SCENTS THAT SOOTHE THE SENSES.",
       cta: "Browse Candles",
-      image: "/public/images/shaped3.png" // Update with your actual image path
+      image: "/images/shaped3.png" // Update with your actual image path
     },
     {
       id: 3, // Keeping original ID
@@ -21,7 +21,7 @@ const ProductCarousel = () => {
       subtitle: "",
       description: "EXPLORE OUR EXCLUSIVE COLLECTION OF UNIQUE PERFUMES THAT EMBODY SOPHISTICATION AND STYLE. EACH SCENT IS CAREFULLY CRAFTED TO LEAVE A LASTING IMPRESSION.",
       cta: "Discover More",
-      image: "/public/images/Perfume3.png" // Update with your actual image path
+      image: "/images/Perfume3.png" // Update with your actual image path
     },
     {
       id: 2, // Keeping original ID
@@ -29,7 +29,7 @@ const ProductCarousel = () => {
       subtitle: "",
       description: "DISCOVER OUR RANGE OF BEAUTY PRODUCTS, INCLUDING WEIGHT GAINING SOLUTIONS THAT COMPLEMENT YOUR LIFESTYLE. ELEVATE YOUR SELF-CARE REGIMEN WITH GLAMNEST.",
       cta: "View Products",
-      image: "/public/images/weight.jpg" // Update with your actual image path
+      image: "/images/weight.jpg" // Update with your actual image path
     }
   ];
 
