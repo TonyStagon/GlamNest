@@ -44,11 +44,7 @@ const Contact = () => {
               <div className="map-container">
                 <iframe
                   title="GlamNest Location"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.
-                  123456789012!2d28.1585!3d-25.8604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13
-                  .1!3m3!1m2!1s0x1e9561c1e45dfb3d%3A0x123456789abcdeff!2s11%20Bernini%20Cre
-                  s%2C%20Die%20Hoewes%2C%20Centurion%2C%200163!5e0!3m2!1sen!2sza!4v1620000000000!
-                  5m2!1sen!2sza"
+                  src="https://www.openstreetmap.org/export/embed.html?bbox=28.1565%2C-25.8615%2C28.1605%2C-25.8595&layer=mapnik&marker=-25.8604%2C28.1585"
                   allowFullScreen
                 ></iframe>
               </div>
