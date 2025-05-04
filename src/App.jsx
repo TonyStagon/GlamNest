@@ -7,6 +7,7 @@ import HeroSection from './components/HeroSection';
 import ProductCarousel from './components/ProductCarousel';
 import Contact from './components/Contact';
 import Shop from './pages/Shop'; // Import the Shop page
+import Login from './components/Login';
 import './App.css';
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
           
           {/* Shop Page */}
           <Route path="/shop" element={<Shop />} />
+          <Route path="/login" element={<Login />} />
           </Routes>
         </Router>
       </CartProvider>
