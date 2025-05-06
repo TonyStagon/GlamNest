@@ -1,6 +1,5 @@
 // src/components/Navbar.jsx
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import CartPopup from './CartPopup';
@@ -108,9 +107,5 @@ const Navbar = ({ showLogin, setShowLogin }) => {
   );
 };
 
-Navbar.propTypes = {
-  showLogin: PropTypes.bool,
-  setShowLogin: PropTypes.func
-};
 
 export default Navbar;
