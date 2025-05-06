@@ -1,0 +1,8 @@
+tutarthurs@gmail.com
+password : iamthebossinthisbench@khol
+
+npm install -g firebase-tools
+firebase login
+firebase init
+npm install firebase react-firebase-hooks
+firebase deploy --only hosting:undefined
