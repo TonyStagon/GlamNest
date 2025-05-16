@@ -3,7 +3,13 @@
     "private": true,
     "version": "0.0.0",
     "type": "module",
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "framework": "vite",
     "scripts": {
+        "buildCommand": "npm run build",
+        "outputDirectory": "dist",
+        "framework": "vite",
         "dev": "vite",
         "build": "vite build",
         "lint": "eslint .",
