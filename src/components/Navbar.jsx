@@ -5,7 +5,7 @@ import { useCart } from '../contexts/CartContext';
 import CartPopup from './CartPopup';
 import './Navbar.css';
 
-const Navbar = () => {
+const Navbar = ({ showLogin, setShowLogin }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -96,7 +96,12 @@ const Navbar = () => {
         </div>
 
         {/* Cart Popup */}
-        <CartPopup isOpen={isCartOpen} onClose={toggleCart} />
+        <CartPopup
+          isOpen={isCartOpen}
+          onClose={toggleCart}
+          showLogin={showLogin}
+          setShowLogin={setShowLogin}
+        />
       </div>
     </nav>
   );

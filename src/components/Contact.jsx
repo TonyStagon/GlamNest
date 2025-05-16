@@ -44,13 +44,13 @@ const Contact = () => {
               <div className="map-container">
                 <iframe
                   title="GlamNest Location"
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=28.2294%2C-25.7470%2C28.2334%2C-25.7450&layer=mapnik&marker=-25.7460%2C28.2314"
+                  src="https://www.openstreetmap.org/export/embed.html?bbox=28.2290%2C-25.7465%2C28.2300%2C-25.7455&layer=mapnik&marker=-25.7460%2C28.2295"
                   allowFullScreen
                 ></iframe>
               </div>
               <div className="locations-list">
                 <div className="location-item">
-                  <h3>11 Bernini Cres, Die Hoewes</h3>
+                  <h3>110 Bernini Cres, Die Hoewes</h3>
                   <p>Pretoria, 0081</p>
                   <p>Mon-Fri 9am-5pm, Sat 9am-1pm</p>
                   <p>012-345-6789</p>

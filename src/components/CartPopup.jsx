@@ -2,18 +2,27 @@
 import { useCart } from '../contexts/CartContext';
 import './CartPopup.css';
 
-const CartPopup = ({ isOpen, onClose }) => {
-  const { cartItems, removeFromCart, updateQuantity } = useCart();
+const CartPopup = ({ isOpen, onClose, showLogin, setShowLogin }) => {
+    const { cartItems, removeFromCart, updateQuantity } = useCart();
+    const DELIVERY_FEE = 60; // R60 delivery fee
 
-  const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-  };
+    const calculateSubtotal = () => {
+        return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    };
 
-  if (!isOpen) return null;
+    const calculateTotal = () => {
+        return calculateSubtotal() + DELIVERY_FEE;
+    };
 
-  return (
-    <div className="cart-popup-overlay" onClick={onClose}>
-      <div className="cart-popup" onClick={(e) => e.stopPropagation()}>
+    const usdToZar = (amount) => {
+        return (amount * 18.5).toFixed(2); // Example conversion rate
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className={`cart-popup-overlay ${isOpen ? 'active' : ''}`} onClick={onClose}>
+            <div className={`cart-popup ${isOpen ? 'active' : ''}`} onClick={(e) => e.stopPropagation()}>
         <div className="cart-popup-header">
           <h2>YOUR CART</h2>
           <button className="close-btn" onClick={onClose}>×</button>
@@ -47,10 +56,23 @@ const CartPopup = ({ isOpen, onClose }) => {
             <div className="cart-total">
               <div className="total-row">
                 <span>Subtotal</span>
-                <span>USD ${calculateTotal().toFixed(2)}</span>
+                <span>R {usdToZar(calculateSubtotal())}</span>
+              </div>
+              <div className="total-row">
+                <span>Delivery Fee</span>
+                <span>R {DELIVERY_FEE.toFixed(2)}</span>
+              </div>
+              <div className="total-row">
+                <span>Total</span>
+                <span>R {usdToZar(calculateTotal())}</span>
               </div>
             </div>
-            <button className="checkout-btn">CHECKOUT</button>
+            <button
+              className="checkout-btn"
+              onClick={() => setShowLogin(true)}
+            >
+              CHECKOUT
+            </button>
           </>
         )}
       </div>
