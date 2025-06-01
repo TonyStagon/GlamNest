@@ -17,7 +17,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "esbuild": "^0.25.4",
+        "esbuild": "0.24.0",
         "firebase": "^11.6.1",
         "leaflet": "^1.9.4",
         "react": "^19.0.0",

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import AddProduct from './AddProduct';
+import ViewProducts from './ViewProducts';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -21,16 +22,23 @@ const AdminDashboard = () => {
     <div className="admin-dashboard">
       <div className="sidebar">
         <h2>Admin Panel</h2>
-        <button 
+        <button
           className={activeTab === 'add' ? 'active' : ''}
           onClick={() => setActiveTab('add')}
         >
           Add Product
         </button>
+        <button
+          className={activeTab === 'view' ? 'active' : ''}
+          onClick={() => setActiveTab('view')}
+        >
+          View Products
+        </button>
         <button onClick={handleLogout}>Logout</button>
       </div>
       <div className="content">
         {activeTab === 'add' && <AddProduct />}
+        {activeTab === 'view' && <ViewProducts />}
       </div>
     </div>
   );

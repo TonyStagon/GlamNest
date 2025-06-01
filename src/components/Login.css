@@ -80,3 +80,20 @@ button[type="submit"]:hover {
     margin-bottom: 1rem;
     text-align: center;
 }
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.close-button:hover {
+  color: #000;
+}

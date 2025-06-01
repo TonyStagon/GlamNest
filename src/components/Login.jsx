@@ -4,6 +4,11 @@ import { auth } from '../firebase';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Login component
+ * @param {Object} props
+ * @param {function(boolean): void} props.setShowLogin - Function to show/hide login popup
+ */
 function Login({ setShowLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,6 +16,10 @@ function Login({ setShowLogin }) {
   const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate();
 
+  /**
+   * Handle form submission
+   * @param {React.FormEvent} e - Form event
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -19,21 +28,39 @@ function Login({ setShowLogin }) {
       if (isRegistering) {
         await createUserWithEmailAndPassword(auth, email, password);
         setShowLogin(false);
-        navigate('/admin');
+        navigate('/');
       } else {
         await signInWithEmailAndPassword(auth, email, password);
         setShowLogin(false);
-        navigate('/admin');
+        
+        // Check for admin credentials and redirect to admin dashboard
+        if (email === import.meta.env.VITE_ADMIN_EMAIL && password === import.meta.env.VITE_ADMIN_PASSWORD) {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
       }
     } catch (err) {
-      setError(err.message);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An error occurred');
+      }
     }
   };
 
   return (
       <div className="login-overlay" onClick={() => setShowLogin(false)}>
           <div className="login-container" onClick={(e) => e.stopPropagation()}>
-      <h2>{isRegistering ? 'Register Admin' : 'Admin Login'}</h2>
+      <div className="form-header">
+        <h2>{isRegistering ? 'Register' : 'Login'}</h2>
+        <button className="close-button" onClick={() => {
+          setShowLogin(false);
+          navigate('/');
+        }}>
+          ×
+        </button>
+      </div>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -56,7 +83,7 @@ function Login({ setShowLogin }) {
         </div>
         <button type="submit">{isRegistering ? 'Register' : 'Login'}</button>
         <p className="toggle-form" onClick={() => setIsRegistering(!isRegistering)}>
-          {isRegistering ? 'Already have an account? Login' : 'Need an admin account? Register'}
+          {isRegistering ? 'Already have an account? Login' : 'Need a user account? Register'}
         </p>
       </form>
         </div>
