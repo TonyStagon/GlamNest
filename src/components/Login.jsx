@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'fire
 import { auth } from '../firebase';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 /**
  * Login component
@@ -14,6 +15,7 @@ function Login({ setShowLogin }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   /**
@@ -41,8 +43,21 @@ function Login({ setShowLogin }) {
         }
       }
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
+      if (err && typeof err === 'object' && 'code' in err) {
+        // Map Firebase error codes to user-friendly messages
+        switch (err.code) {
+          case 'auth/invalid-email':
+            setError('Invalid email address');
+            break;
+          case 'auth/user-not-found':
+            setError('Email not found');
+            break;
+          case 'auth/wrong-password':
+            setError('Incorrect password');
+            break;
+          default:
+            setError('Wrong credentials');
+        }
       } else {
         setError('An error occurred');
       }
@@ -65,21 +80,30 @@ function Login({ setShowLogin }) {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <div className="input-with-icon">
+            <FaEnvelope className="input-icon" />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
         </div>
         <div className="form-group">
           <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="input-with-icon">
+            <FaLock className="input-icon" />
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <span className="password-toggle" onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
         </div>
         <button type="submit">{isRegistering ? 'Register' : 'Login'}</button>
         <p className="toggle-form" onClick={() => setIsRegistering(!isRegistering)}>

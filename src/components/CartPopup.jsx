@@ -4,7 +4,7 @@ import './CartPopup.css';
 
 const CartPopup = ({ isOpen, onClose, showLogin, setShowLogin }) => {
     const { cartItems, removeFromCart, updateQuantity } = useCart();
-    const DELIVERY_FEE = 60; // R60 delivery fee
+    const DELIVERY_FEE = 75; // R75 delivery fee
 
     const calculateSubtotal = () => {
         return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -14,9 +14,6 @@ const CartPopup = ({ isOpen, onClose, showLogin, setShowLogin }) => {
         return calculateSubtotal() + DELIVERY_FEE;
     };
 
-    const usdToZar = (amount) => {
-        return (amount * 18.5).toFixed(2); // Example conversion rate
-    };
 
     if (!isOpen) return null;
 
@@ -36,7 +33,7 @@ const CartPopup = ({ isOpen, onClose, showLogin, setShowLogin }) => {
               <div key={item.id} className="cart-item">
                 <div className="item-info">
                   <h3>{item.name}</h3>
-                  <p>${item.price.toFixed(2)}</p>
+                  <p>{item.price.toFixed(2)}</p>
                 </div>
                 <div className="quantity-control">
                   <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
@@ -56,7 +53,7 @@ const CartPopup = ({ isOpen, onClose, showLogin, setShowLogin }) => {
             <div className="cart-total">
               <div className="total-row">
                 <span>Subtotal</span>
-                <span>R {usdToZar(calculateSubtotal())}</span>
+                <span>R {calculateSubtotal().toFixed(2)}</span>
               </div>
               <div className="total-row">
                 <span>Delivery Fee</span>
@@ -64,7 +61,7 @@ const CartPopup = ({ isOpen, onClose, showLogin, setShowLogin }) => {
               </div>
               <div className="total-row">
                 <span>Total</span>
-                <span>R {usdToZar(calculateTotal())}</span>
+                <span>R {calculateTotal().toFixed(2)}</span>
               </div>
             </div>
             <button

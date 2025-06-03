@@ -17,7 +17,7 @@
     width: 90%;
     padding: 2rem;
     border-radius: 8px;
-    background-color: white;
+    background-color: #dfc3b1;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
@@ -37,9 +37,22 @@
     font-weight: 500;
 }
 
+.input-with-icon {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+}
+
 .form-group input {
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.5rem 35px 0.5rem 35px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 1rem;
@@ -48,7 +61,7 @@
 button[type="submit"] {
     width: 100%;
     padding: 0.75rem;
-    background-color: #007bff;
+    background-color: #222120ee;
     color: white;
     border: none;
     border-radius: 4px;
@@ -58,7 +71,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color:  #e47124ee;
 }
 
 .toggle-form {
@@ -89,11 +102,29 @@ button[type="submit"]:hover {
 .close-button {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   cursor: pointer;
   color: #333;
 }
 
 .close-button:hover {
-  color: #000;
+  color: #e20d0d;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+}
+
+.password-toggle:hover {
+    color: #000;
+}
+
+.password-toggle svg {
+    width: 20px;
+    height: 20px;
 }
