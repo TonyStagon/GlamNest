@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import AdminDashboard from './components/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import EditProduct from './components/EditProduct';
 import { CartProvider } from './contexts/CartContext';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
@@ -59,6 +60,11 @@ function MainApp() {
           <Route path="/admin" element={
             <ProtectedRoute>
               <AdminDashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/edit-product/:id" element={
+            <ProtectedRoute>
+              <EditProduct />
             </ProtectedRoute>
           } />
         </Routes>

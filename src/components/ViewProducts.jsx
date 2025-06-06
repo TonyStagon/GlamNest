@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import './ViewProducts.css';
 
 /**
@@ -15,6 +16,7 @@ const ViewProducts = () => {
   /** @type {[Product[], function]} */
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -74,7 +76,7 @@ const ViewProducts = () => {
               <td>
                 <button
                   className="edit-btn"
-                  onClick={() => window.location.href = `/edit-product/${product.id}`}
+                  onClick={() => navigate(`/admin/edit-product/${product.id}`)}
                 >
                   Edit
                 </button>

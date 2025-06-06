@@ -66,6 +66,17 @@
 
 .profile-icon:hover svg {
     color: #646cff;
+    .profile-dot {
+        position: absolute;
+        top: -3px;
+        right: -3px;
+        width: 8px;
+        height: 8px;
+        background-color: #ff4757;
+        border-radius: 50%;
+        border: 2px solid white;
+        z-index: 10;
+    }
 }
 
 .navbar {
