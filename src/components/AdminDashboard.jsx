@@ -3,10 +3,11 @@ import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import AddProduct from './AddProduct';
 import ViewProducts from './ViewProducts';
+import ViewUsers from './ViewUsers';
 import './AdminDashboard.css';
 
-const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('add');
+const AdminDashboard = ({ initialTab = 'add' }) => {
+  const [activeTab, setActiveTab] = useState(initialTab);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -34,11 +35,18 @@ const AdminDashboard = () => {
         >
           View Products
         </button>
+        <button
+          className={activeTab === 'users' ? 'active' : ''}
+          onClick={() => setActiveTab('users')}
+        >
+          View Users
+        </button>
         <button onClick={handleLogout}>Logout</button>
       </div>
       <div className="content">
         {activeTab === 'add' && <AddProduct />}
         {activeTab === 'view' && <ViewProducts />}
+        {activeTab === 'users' && <ViewUsers />}
       </div>
     </div>
   );

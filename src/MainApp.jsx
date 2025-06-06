@@ -5,6 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import EditProduct from './components/EditProduct';
 import { CartProvider } from './contexts/CartContext';
 import Navbar from './components/Navbar';
+import Checkout from './components/Checkout';
 import HeroSection from './components/HeroSection';
 import ProductCarousel from './components/ProductCarousel';
 import Contact from './components/Contact';
@@ -56,6 +57,11 @@ function MainApp() {
             </main>
           } />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/checkout" element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          } />
           <Route path="/login" element={<Login setShowLogin={setShowLogin} />} />
           <Route path="/admin" element={
             <ProtectedRoute>
@@ -65,6 +71,11 @@ function MainApp() {
           <Route path="/admin/edit-product/:id" element={
             <ProtectedRoute>
               <EditProduct />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/view-users" element={
+            <ProtectedRoute>
+              <AdminDashboard initialTab="users" />
             </ProtectedRoute>
           } />
         </Routes>

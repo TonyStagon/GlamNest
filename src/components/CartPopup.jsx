@@ -1,8 +1,11 @@
 // src/components/CartPopup.jsx
 import { useCart } from '../contexts/CartContext';
 import './CartPopup.css';
+import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 
 const CartPopup = ({ isOpen, onClose, showLogin, setShowLogin }) => {
+    const navigate = useNavigate();
     const { cartItems, removeFromCart, updateQuantity } = useCart();
     const DELIVERY_FEE = 75; // R75 delivery fee
 
@@ -66,7 +69,14 @@ const CartPopup = ({ isOpen, onClose, showLogin, setShowLogin }) => {
             </div>
             <button
               className="checkout-btn"
-              onClick={() => setShowLogin(true)}
+              onClick={() => {
+                if (auth.currentUser) {
+                  navigate('/checkout');
+                  onClose();
+                } else {
+                  setShowLogin(true);
+                }
+              }}
             >
               CHECKOUT
             </button>

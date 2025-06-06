@@ -8,13 +8,23 @@ const AddProduct = () => {
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
   const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(/** @type {File | null} */ null);
   const [imagePreview, setImagePreview] = useState('');
   const fileInputRef = useRef(null);
 
-  const handleImageChange = (e) => {
+  const categories = [
+    'Makeup',
+    'Skincare',
+    'Haircare',
+    'Fragrance',
+    'Accessories'
+  ];
+
+  const handleImageChange = (/** @type {React.ChangeEvent<HTMLInputElement>} */ e) => {
+    if (!e.target.files) return;
     const file = e.target.files[0];
     if (file) {
       setImage(file);
@@ -22,7 +32,7 @@ const AddProduct = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (/** @type {React.FormEvent} */ e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setMessage('');
@@ -30,37 +40,38 @@ const AddProduct = () => {
     try {
       let imageBase64 = '';
       
-      // Convert image to base64 if selected
       if (image) {
         imageBase64 = await new Promise((resolve) => {
           const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
+          reader.onload = () => {
+            if (!reader.result) return;
+            resolve(typeof reader.result === 'string' ? reader.result : '');
+          };
           reader.readAsDataURL(image);
         });
       }
 
-      // Add product to Firestore
-      const docRef = await addDoc(collection(db, 'products'), {
+      await addDoc(collection(db, 'products'), {
         name,
         price: parseFloat(price),
         quantity: parseInt(quantity),
         description,
+        category,
         imageBase64,
         createdAt: new Date()
       });
-      console.log('Product added with ID:', docRef.id);
 
       setMessage('Product added successfully!');
-      // Reset form
       setName('');
       setPrice('');
       setQuantity('');
       setDescription('');
+      setCategory('');
       setImage(null);
       setImagePreview('');
     } catch (error) {
       console.error('Error adding product:', error);
-      setMessage(`Error adding product. Please check console for details.`);
+      setMessage(`Error adding product`);
     } finally {
       setIsSubmitting(false);
     }
@@ -101,6 +112,19 @@ const AddProduct = () => {
           />
         </div>
         <div className="form-group">
+          <label>Category</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            required
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
           <label>Description</label>
           <textarea
             value={description}
@@ -108,7 +132,6 @@ const AddProduct = () => {
             required
           />
         </div>
-        
         <div className="form-group">
           <label>Product Image</label>
           <input
@@ -119,7 +142,7 @@ const AddProduct = () => {
           />
           {imagePreview && (
             <div className="image-preview">
-              <img src={imagePreview} alt="Preview" style={{maxWidth: '200px', maxHeight: '200px'}} />
+              <img src={imagePreview} alt="Preview" />
             </div>
           )}
         </div>
