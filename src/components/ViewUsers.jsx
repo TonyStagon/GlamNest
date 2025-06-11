@@ -18,10 +18,15 @@ const ViewUsers = () => {
         id: doc.id,
         ...doc.data()
       }));
+      console.log('Fetched users:', usersList);
       setUsers(usersList);
+      
+      if (usersList.length === 0) {
+        console.warn('No users found in collection');
+      }
     } catch (error) {
-      setError('Error fetching users');
-      console.error('Error:', error);
+      setError(`Error fetching users: ${error.message}`);
+      console.error('Error details:', error);
     } finally {
       setLoading(false);
     }

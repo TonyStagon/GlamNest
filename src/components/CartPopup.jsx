@@ -1,16 +1,45 @@
 // src/components/CartPopup.jsx
+/**
+ * @type {{
+ *   cartItems: import('../contexts/CartContext').CartItem[]
+ *   removeFromCart: (productId: string) => void
+ *   updateQuantity: (productId: string, newQuantity: number) => void
+ * }}
+ */
 import { useCart } from '../contexts/CartContext';
 import './CartPopup.css';
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 
-const CartPopup = ({ isOpen, onClose, showLogin, setShowLogin }) => {
+/**
+ * @typedef {{
+ *   isOpen: boolean
+ *   onClose: () => void
+ *   showLogin?: boolean
+ *   setShowLogin?: (value: boolean) => void
+ * }} CartPopupProps
+ */
+
+/** @type {import('react').FC<CartPopupProps>} */
+const CartPopup = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
     const { cartItems, removeFromCart, updateQuantity } = useCart();
     const DELIVERY_FEE = 75; // R75 delivery fee
 
+    /**
+     * @typedef {{
+     *   id: string
+     *   name: string
+     *   price: number
+     *   quantity: number
+     * }} CartItem
+     */
+    
     const calculateSubtotal = () => {
-        return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+        return cartItems.reduce((
+            /** @type {number} */ total,
+            /** @type {CartItem} */ item
+        ) => total + (item.price * item.quantity), 0);
     };
 
     const calculateTotal = () => {
@@ -32,7 +61,10 @@ const CartPopup = ({ isOpen, onClose, showLogin, setShowLogin }) => {
           {cartItems.length === 0 ? (
             <p className="empty-cart">Your cart is empty</p>
           ) : (
-            cartItems.map((item) => (
+            cartItems.map((
+                /** @type {{id: string, name: string, price: number, quantity: number}} */
+                item
+            ) => (
               <div key={item.id} className="cart-item">
                 <div className="item-info">
                   <h3>{item.name}</h3>
@@ -69,12 +101,15 @@ const CartPopup = ({ isOpen, onClose, showLogin, setShowLogin }) => {
             </div>
             <button
               className="checkout-btn"
-              onClick={() => {
-                if (auth.currentUser) {
-                  navigate('/checkout');
+              onClick={async (e) => {
+                try {
+                  await navigate('/checkout', {
+                    replace: true,
+                    state: { from: location.pathname }
+                  });
                   onClose();
-                } else {
-                  setShowLogin(true);
+                } catch (error) {
+                  console.error('Checkout navigation error:', error);
                 }
               }}
             >

@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+/**
+ * @type {import('../contexts/CartContext').useCart}
+ */
 import { useCart } from '../contexts/CartContext';
 import { auth } from '../firebase';
 import CartPopup from './CartPopup';
@@ -74,6 +77,7 @@ const Navbar = ({ showLogin, setShowLogin }) => {
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
               </div>
+              {!isLoggedIn && <span className="login-text">Login</span>}
               {isLoggedIn && <div className="profile-dot"></div>}
             </div>
 
