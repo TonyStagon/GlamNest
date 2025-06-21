@@ -57,11 +57,7 @@ function MainApp() {
             </main>
           } />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/checkout" element={
-            <ProtectedRoute>
-              <Checkout />
-            </ProtectedRoute>
-          } />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/login" element={<Login setShowLogin={setShowLogin} />} />
           <Route path="/admin" element={
             <ProtectedRoute>
@@ -78,9 +74,14 @@ function MainApp() {
               <AdminDashboard initialTab="users" />
             </ProtectedRoute>
           } />
-        </Routes>
-      </CartProvider>
-    </div>
+          <Route path="/admin/view-products" element={
+            <ProtectedRoute>
+              <AdminDashboard initialTab="products" />
+            </ProtectedRoute>
+          } />
+       </Routes>
+     </CartProvider>
+   </div>
   );
 }
 

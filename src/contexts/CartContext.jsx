@@ -9,6 +9,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
  *   name: string
  *   price: number
  *   quantity: number
+ *   imageBase64: string
  * }} CartItem
  */
 
@@ -30,7 +31,7 @@ const CartContext = createContext(
   /** @type {CartContextValue} */ ({
     cartItems: [],
     cartCount: 0,
-    deliveryFee: 75,
+    deliveryFee: 1,
     addToCart: () => {
       throw new Error('useCart must be used within CartProvider')
     },
@@ -58,7 +59,7 @@ export const CartProvider = ({ children }) => {
   /** @type {[number, React.Dispatch<React.SetStateAction<number>>]} */
   const [cartCount, setCartCount] = useState(0);
   /** @type {[number, React.Dispatch<React.SetStateAction<number>>]} */
-  const [deliveryFee, setDeliveryFee] = useState(75); // Default R75 delivery
+  const [deliveryFee, setDeliveryFee] = useState(1); // Default R75 delivery
 
   // Load cart when auth state changes
   useEffect(() => {

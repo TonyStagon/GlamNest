@@ -1,0 +1,131 @@
+.payment-methods {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order-summary {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.order-summary h3 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 18px;
+}
+
+.breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.total-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-size: 15px;
+}
+
+.total-label {
+    font-weight: bold;
+}
+
+.total-amount {
+    font-size: 20px;
+    font-weight: bold;
+    color: #007bff;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.payment-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.StripeElement {
+    margin: 15px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.payment-methods button {
+    background: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.payment-methods button:hover {
+    background: #45a049;
+}
+
+.payment-methods button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}
+
+#paypal-button-container {
+    margin-top: 20px;
+}
+
+.payment-form-container {
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin: 20px 0;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.card-element {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+}
+
+.payment-error {
+    color: #e74c3c;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.payment-button {
+    margin-top: 15px;
+    background: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.payment-button:hover {
+    background: #45a049;
+}
+
+.payment-button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}

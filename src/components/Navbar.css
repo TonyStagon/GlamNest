@@ -4,6 +4,22 @@
     position: relative;
     display: flex;
     align-items: center;
+    transition: all 0.3s ease;
+}
+
+@media (pointer: fine) {
+    .profile-dropdown-container {
+        pointer-events: auto;
+    }
+}
+
+@media (pointer: coarse) {
+    .profile-container {
+        cursor: pointer;
+    }
+    .profile-dropdown {
+        pointer-events: auto;
+    }
 }
 
 .profile-container {

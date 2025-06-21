@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, setPersistence, browserSessionPersistence } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getAuth, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
@@ -20,3 +20,14 @@ setPersistence(auth, browserSessionPersistence)
     });
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
+// Ensure authenticated users exist in Firestore
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        setDoc(doc(db, 'users', user.uid), {
+            email: user.email,
+            uid: user.uid,
+            lastLogin: serverTimestamp()
+        }, { merge: true }); // Merge with existing data if any
+    }
+});

@@ -24,7 +24,7 @@ import { useNavigate } from 'react-router-dom';
 const CartPopup = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
     const { cartItems, removeFromCart, updateQuantity } = useCart();
-    const DELIVERY_FEE = 75; // R75 delivery fee
+    const DELIVERY_FEE = 1; // R75 delivery fee
 
     /**
      * @typedef {{
@@ -66,6 +66,16 @@ const CartPopup = ({ isOpen, onClose }) => {
                 item
             ) => (
               <div key={item.id} className="cart-item">
+                <div className="item-image">
+                  {item.imageBase64 ? (
+                    <img
+                      src={`data:image/jpeg;base64,${item.imageBase64}`}
+                      alt={item.name}
+                    />
+                  ) : (
+                    <div className="placeholder-image"></div>
+                  )}
+                </div>
                 <div className="item-info">
                   <h3>{item.name}</h3>
                   <p>{item.price.toFixed(2)}</p>

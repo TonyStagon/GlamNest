@@ -70,7 +70,10 @@ const Navbar = ({ showLogin, setShowLogin }) => {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {/* Profile Dropdown Container */}
           <div className="profile-dropdown-container">
-            <div className="profile-container" onClick={toggleDropdown}>
+            <div className="profile-hover-area"
+                 onMouseEnter={() => setShowDropdown(true)}
+                 onMouseLeave={() => setTimeout(() => setShowDropdown(false), 300)}>
+              <div className="profile-container">
               <div className="profile-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -134,6 +137,7 @@ const Navbar = ({ showLogin, setShowLogin }) => {
           showLogin={showLogin}
           setShowLogin={setShowLogin}
         />
+      </div>
       </div>
     </nav>
   );
