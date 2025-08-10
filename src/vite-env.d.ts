@@ -1,5 +1,47 @@
 /// <reference types="vite/client" />
 
+/**
+ * @typedef YocoSDK
+ * @property {(options: {publicKey: string}) => ({
+ *   showPopup: (options: {
+ *     amountInCents: number;
+ *     currency: string;
+ *     name: string;
+ *     description: string;
+ *     callback: (result: {error?: {message: string}, id?: string}) => void
+ *   }) => void
+ * })} new
+ */
+
+/* Make these types available globally via JSDoc */
+/**
+ * @typedef {{
+ *   YocoSDK: typeof YocoSDK
+ * }} WindowWithYoco
+ */
+
+/**
+ * @typedef {Window & WindowWithYoco} Window
+ */
+
+interface YocoSDKType {
+  new(options: { publicKey: string }): {
+    showPopup(options: {
+      amountInCents: number;
+      currency: string;
+      name: string;
+      description: string;
+      callback: (result: { error?: { message: string }; id?: string }) => void;
+    }): void;
+  };
+}
+
+declare global {
+  interface Window {
+    YocoSDK: YocoSDKType;
+  }
+}
+
 interface ImportMetaEnv {
   readonly VITE_STRIPE_PUBLISHABLE_KEY: string
   readonly VITE_STRIPE_SECRET_KEY: string

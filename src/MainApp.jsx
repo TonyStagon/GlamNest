@@ -11,6 +11,9 @@ import ProductCarousel from './components/ProductCarousel';
 import Contact from './components/Contact';
 import Shop from './pages/Shop';
 import Login from './components/Login';
+import PaymentCancelled from './components/PaymentCancelled';
+import PaymentFailed from './components/PaymentFailed';
+import PaymentSuccess from './components/PaymentSuccess'; // Import the payment success component
 
 function MainApp() {
   const location = useLocation();
@@ -59,6 +62,12 @@ function MainApp() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/login" element={<Login setShowLogin={setShowLogin} />} />
+          
+          {/* Payment result routes - ADD THESE */}
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-cancelled" element={<PaymentCancelled />} />
+          <Route path="/payment-failed" element={<PaymentFailed />} />
+          
           <Route path="/admin" element={
             <ProtectedRoute>
               <AdminDashboard />
