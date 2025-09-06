@@ -1,0 +1,301 @@
+.view-orders {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.orders-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.orders-header h2 {
+    color: #333;
+    margin: 0;
+    font-size: 24px;
+}
+
+.orders-stats {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: 500;
+    color: #666;
+}
+
+.refresh-btn,
+.retry-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.refresh-btn:hover,
+.retry-btn:hover {
+    background-color: #0056b3;
+}
+
+.loading,
+.error {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: #666;
+}
+
+.error {
+    color: #dc3545;
+}
+
+.no-orders {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    font-size: 18px;
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.order-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.order-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    cursor: pointer;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.order-header:hover {
+    background-color: #e9ecef;
+}
+
+.order-main-info h3 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.order-date {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.order-summary {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.order-amount {
+    font-size: 18px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.status-badge {
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+.expand-icon {
+    font-size: 14px;
+    color: #666;
+    margin-left: 10px;
+}
+
+.order-details {
+    padding: 20px;
+    background-color: white;
+    border-top: 1px solid #e9ecef;
+}
+
+.details-section {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.details-section:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.details-section h4 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.customer-info p,
+.shipping-info p {
+    margin: 8px 0;
+    color: #555;
+    line-height: 1.4;
+}
+
+.customer-info strong,
+.shipping-info strong {
+    color: #333;
+    min-width: 80px;
+    display: inline-block;
+}
+
+.order-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.item-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.item-name {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.item-price {
+    color: #666;
+    font-size: 14px;
+}
+
+.item-total {
+    font-weight: bold;
+    color: #28a745;
+    font-size: 16px;
+}
+
+.order-totals {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.total-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.total-final {
+    border-top: 2px solid #dee2e6;
+    padding-top: 10px;
+    margin-top: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.payment-method {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #dee2e6;
+    color: #666;
+    font-style: italic;
+}
+
+
+/* Mobile Responsive */
+
+@media (max-width: 768px) {
+    .view-orders {
+        padding: 15px;
+    }
+    .orders-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    .orders-stats {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .order-summary {
+        align-self: flex-end;
+    }
+    .order-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .item-total {
+        align-self: flex-end;
+    }
+    .total-line {
+        font-size: 14px;
+    }
+    .total-final {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .view-orders {
+        padding: 10px;
+    }
+    .order-details {
+        padding: 15px;
+    }
+    .details-section h4 {
+        font-size: 14px;
+    }
+    .customer-info p,
+    .shipping-info p {
+        font-size: 14px;
+    }
+    .order-amount {
+        font-size: 16px;
+    }
+}

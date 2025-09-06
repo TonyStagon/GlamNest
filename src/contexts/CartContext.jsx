@@ -1,7 +1,7 @@
 // src/contexts/CartContext.jsx
 import { createContext, useState, useContext, useEffect } from 'react';
 import { auth, db } from '../firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 
 /**
  * @typedef {{
@@ -23,6 +23,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
  *   updateQuantity: (productId: string, newQuantity: number) => void
  *   calculateTotal: () => number
  *   setDeliveryFee: (fee: number) => void
+ *   clearCart: () => void
  * }} CartContextValue
  */
 
@@ -43,6 +44,9 @@ const CartContext = createContext(
     },
     calculateTotal: () => 0,
     setDeliveryFee: () => {
+      throw new Error('useCart must be used within CartProvider')
+    },
+    clearCart: () => {
       throw new Error('useCart must be used within CartProvider')
     }
   })
@@ -83,21 +87,6 @@ export const CartProvider = ({ children }) => {
     return unsubscribe;
   }, []);
 
-  // Save cart to Firestore whenever it changes
-  useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      const saveCart = async () => {
-        const cartRef = doc(db, 'carts', user.uid);
-        await setDoc(cartRef, {
-          items: cartItems,
-          count: cartCount,
-          deliveryFee
-        });
-      };
-      saveCart();
-    }
-  }, [cartItems, cartCount, deliveryFee]);
 
   
   /**
@@ -162,8 +151,15 @@ export const CartProvider = ({ children }) => {
     return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
+  const clearCart = () => {
+    // Clear local state only - Firestore will be updated on next cart interaction
+    setCartItems([]);
+    setCartCount(0);
+    setDeliveryFee(1);
+  };
+
   return (
-    <CartContext.Provider 
+    <CartContext.Provider
       value={{ 
         cartItems,
         cartCount,
@@ -172,7 +168,8 @@ export const CartProvider = ({ children }) => {
         updateQuantity,
         calculateTotal,
         deliveryFee,
-        setDeliveryFee
+        setDeliveryFee,
+        clearCart
       }}
     >
       {children}

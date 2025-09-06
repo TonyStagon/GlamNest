@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import AddProduct from './AddProduct';
 import ViewProducts from './ViewProducts';
 import ViewUsers from './ViewUsers';
+import ViewOrders from './ViewOrders';
 import './AdminDashboard.css';
 
 const AdminDashboard = ({ initialTab = 'add' }) => {
@@ -41,12 +42,19 @@ const AdminDashboard = ({ initialTab = 'add' }) => {
         >
           View Users
         </button>
+        <button
+          className={activeTab === 'orders' ? 'active' : ''}
+          onClick={() => setActiveTab('orders')}
+        >
+          View Orders
+        </button>
         <button onClick={handleLogout}>Logout</button>
       </div>
       <div className="content">
         {activeTab === 'add' && <AddProduct />}
         {activeTab === 'view' && <ViewProducts />}
         {activeTab === 'users' && <ViewUsers />}
+        {activeTab === 'orders' && <ViewOrders />}
       </div>
     </div>
   );

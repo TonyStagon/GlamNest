@@ -63,3 +63,24 @@
 .continue-button:hover {
     background: #0056b3;
 }
+
+.shipping-details {
+    text-align: left;
+    margin-top: 20px;
+    padding: 15px;
+    background: #e3f2fd;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+}
+
+.shipping-details h3 {
+    margin-top: 0;
+    color: #1565c0;
+    font-size: 18px;
+}
+
+.shipping-details p {
+    margin: 8px 0;
+    color: #37474f;
+    font-size: 14px;
+}

@@ -2,18 +2,24 @@
  * Yoco payment form component using the new Checkout API
  * @param {Object} props - Component properties
  * @param {number} props.amount - Payment amount in ZAR (South African Rand)
+ * @param {Function} [props.onSuccess] - Callback function called when payment is successfully initiated
  */
 // @ts-check
 "use strict";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 
 import './PaymentForm.css';
 
 /**
  * @param {Object} props
  * @param {number} props.amount
+ * @param {function(string): void} [props.onSuccess] - Callback function called when checkout is successfully created, receives payment method type
  */
-export const PaymentForm = ({ amount }) => {
+export const PaymentForm = ({ amount, onSuccess }) => {
+  const navigate = useNavigate();
+  
   /** @type {[boolean, (value: boolean) => void]} */
   const [isProcessing, setIsProcessing] = useState(false);
   
@@ -22,15 +28,69 @@ export const PaymentForm = ({ amount }) => {
   
   /** @type {[string|null, (id: string|null) => void]} */
   const [checkoutId, setCheckoutId] = useState(/** @type {string|null} */ (null));
+  
+  /** @type {[boolean, (value: boolean) => void]} */
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+  /** @type {[boolean, (value: boolean) => void]} */
+  const [authLoading, setAuthLoading] = useState(true);
+
+  // Check authentication status
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      const isLoggedIn = !!user;
+      setIsAuthenticated(isLoggedIn);
+      setAuthLoading(false);
+      console.log('🔐 Auth status changed:', {
+        user: user ? user.email : 'No user',
+        isAuthenticated: isLoggedIn,
+        uid: user ? user.uid : 'None'
+      });
+    });
+
+    return unsubscribe;
+  }, []);
+
+  // Additional real-time auth check before payment
+  const checkCurrentAuthStatus = () => {
+    const currentUser = auth.currentUser;
+    const isCurrentlyAuth = !!currentUser;
+    console.log('🔍 Real-time auth check:', {
+      currentUser: currentUser ? currentUser.email : 'No user',
+      isAuthenticated: isCurrentlyAuth
+    });
+    return isCurrentlyAuth;
+  };
 
   const handleYocoCheckout = async () => {
+    // Double-check authentication status in real-time
+    const currentlyAuthenticated = checkCurrentAuthStatus();
+    
+    if (!isAuthenticated || !currentlyAuthenticated) {
+      setError('Please log in to complete your purchase');
+      console.log('🚫 Payment blocked - user not authenticated', {
+        stateAuth: isAuthenticated,
+        currentAuth: currentlyAuthenticated
+      });
+      
+      // Update state to reflect current status
+      setIsAuthenticated(false);
+      
+      // Redirect to login page after a short delay
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+      return;
+    }
+
     setIsProcessing(true);
     setError(null);
 
     console.log('🎯 Starting Yoco checkout:', {
       amount: amount,
       formattedAmount: amount.toLocaleString('en-ZA', {style: 'currency', currency: 'ZAR'}),
-      currency: 'ZAR'
+      currency: 'ZAR',
+      userAuthenticated: isAuthenticated
     });
 
     try {
@@ -61,7 +121,12 @@ export const PaymentForm = ({ amount }) => {
         
         setCheckoutId(data.checkoutId);
         
-        // 2. Redirect to Yoco checkout page
+        // 2. Call onSuccess callback with Yoco as payment method
+        if (onSuccess) {
+          onSuccess('yoco');
+        }
+        
+        // 3. Redirect to Yoco checkout page
         window.location.href = data.redirectUrl;
       } else {
         throw new Error('Failed to create checkout session');
@@ -129,22 +194,68 @@ export const PaymentForm = ({ amount }) => {
         </div>
       )}
 
-      <button 
-        onClick={handleYocoCheckout}
-        disabled={isProcessing}
-        style={{
-          backgroundColor: isProcessing ? '#ccc' : '#007bff',
-          color: 'white',
-          padding: '12px 24px',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: isProcessing ? 'not-allowed' : 'pointer',
-          fontSize: '16px',
-          marginRight: '10px'
-        }}
-      >
-        {isProcessing ? '⏳ Processing...' : '💳 Pay with Yoco'}
-      </button>
+      {authLoading ? (
+        <button
+          disabled={true}
+          style={{
+            backgroundColor: '#ccc',
+            color: 'white',
+            padding: '12px 24px',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'not-allowed',
+            fontSize: '16px',
+            marginRight: '10px'
+          }}
+        >
+          ⏳ Checking authentication...
+        </button>
+      ) : (!isAuthenticated || !checkCurrentAuthStatus()) ? (
+        <div>
+          <div style={{
+            backgroundColor: '#fff3cd',
+            color: '#856404',
+            padding: '12px',
+            border: '1px solid #ffeaa7',
+            borderRadius: '4px',
+            marginBottom: '10px'
+          }}>
+            🔐 Please log in to complete your purchase
+          </div>
+          <button
+            onClick={() => navigate('/login')}
+            style={{
+              backgroundColor: '#28a745',
+              color: 'white',
+              padding: '12px 24px',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              marginRight: '10px'
+            }}
+          >
+            🔑 Login to Pay
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={handleYocoCheckout}
+          disabled={isProcessing}
+          style={{
+            backgroundColor: isProcessing ? '#ccc' : '#007bff',
+            color: 'white',
+            padding: '12px 24px',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: isProcessing ? 'not-allowed' : 'pointer',
+            fontSize: '16px',
+            marginRight: '10px'
+          }}
+        >
+          {isProcessing ? '⏳ Processing...' : '💳 Pay with Yoco'}
+        </button>
+      )}
 
       {checkoutId && (
         <button 

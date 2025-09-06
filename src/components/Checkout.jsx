@@ -2,10 +2,19 @@
  * @file Checkout form component with cart sidebar
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useCart } from '../contexts/CartContext';
 import { PaymentForm } from './PaymentForm';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import usePaymentFlow from '../hooks/usePaymentFlow';
 import './Checkout.css';
+
+/**
+ * @typedef {Object} OrderData
+ * @property {string} paymentMethod
+ * @property {Array<any>} items
+ */
 
 /**
  * @typedef {Object} ContactInfo
@@ -47,7 +56,7 @@ import './Checkout.css';
  * @return {React.JSX.Element} Checkout form
  */
 const Checkout = () => {
-  const { cartItems, updateQuantity, removeFromCart } = useCart();
+  const { cartItems, updateQuantity } = useCart();
   const DELIVERY_FEE = 1; // R75 delivery fee
 
   /** @type {FormData} */
@@ -82,6 +91,9 @@ const Checkout = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState(initialErrors);
   const [showPayment, setShowPayment] = useState(false);
+  
+  // Payment flow hook
+  const paymentFlow = usePaymentFlow();
 
   /**
    * Calculate cart subtotal
@@ -101,10 +113,44 @@ const Checkout = () => {
    * Handle order submission
    * @param {object} orderData
    */
-  const handleOrderSubmission = (orderData) => {
+  const handleOrderSubmission = useCallback(async (/** @type {OrderData & FormData} */ orderData) => {
     console.log('Order submitted:', orderData);
-    // TODO: Implement order submission logic
-  };
+    
+    try {
+      // Save order to Firestore including customer and shipping information
+      const orderNumber = 'ORD-' + Date.now(); // Simple order number
+      const orderRef = await addDoc(collection(db, 'orders'), {
+        ...orderData,
+        totalAmount: calculateTotal(),
+        subtotal: calculateSubtotal(),
+        deliveryFee: DELIVERY_FEE,
+        createdAt: serverTimestamp(),
+        status: 'pending',
+        orderNumber: orderNumber // Make sure this is included for consistency
+      });
+      
+      console.log('Order saved with ID:', orderRef.id, 'Order number:', orderNumber);
+      
+      // Start payment session with centralized session management
+      const sessionStarted = paymentFlow.startPaymentSession({
+        amount: calculateTotal(),
+        shippingInfo: formData.shipping,
+        orderId: orderRef.id,
+        orderNumber: orderNumber // Include order number for consistent display
+      });
+      
+      if (!sessionStarted) {
+        console.error('❌ Failed to start payment session');
+        return false;
+      }
+      
+      return true;
+      
+    } catch (error) {
+      console.error('Error saving order:', error);
+      return false;
+    }
+  }, [calculateTotal, paymentFlow, formData.shipping]);
 
   /**
    * Handles input changes
@@ -323,12 +369,17 @@ const Checkout = () => {
               <div className="payment-form-wrapper">
                 <PaymentForm
                   amount={parseFloat(calculateTotal().toFixed(2))} // Ensure numeric value with 2 decimals
-                  onSuccess={(paymentMethod) => {
-                    handleOrderSubmission({
+                  onSuccess={async (paymentMethod) => {
+                    // Handle order submission and payment session creation
+                    const orderSubmitted = await handleOrderSubmission({
                       ...formData,
                       paymentMethod,
                       items: cartItems
                     });
+                    
+                    if (!orderSubmitted) {
+                      console.error('❌ Failed to process order submission');
+                    }
                   }}
                 />
               </div>
