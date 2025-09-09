@@ -1,8 +1,10 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './PaymentSuccess.css';
 import { useCart } from '../contexts/CartContext';
 import usePaymentFlow from '../hooks/usePaymentFlow';
+import { auth } from '../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 /**
  * @typedef {Object} OrderItem
@@ -22,27 +24,57 @@ const PaymentSuccess = () => {
   const paymentLoading = /** @type {any} */ (paymentFlow).loading;
   const completePayment = /** @type {any} */ (paymentFlow).completePayment;
   const cancelPayment = /** @type {any} */ (paymentFlow).cancelPayment;
+  
+  // Additional auth state tracking specifically for PaymentSuccess
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
 
-  /**
-   * Handle payment completion and cleanup (but don't clear cart yet)
-   */
+  // Monitor auth state continuously
   useEffect(() => {
-    let hasProcessed = false;
-    
-    const processPaymentCompletion = async () => {
-      if (hasProcessed) return;
-      hasProcessed = true;
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      const userAuthenticated = !!user;
+      setIsAuthenticated(userAuthenticated);
+      setAuthLoading(false);
       
-      // Don't clear cart here - wait until user clicks "Continue Shopping"
-      // This allows us to show the purchased items and amount on the success page
-      console.log('🎉 Payment completed - cart preserved for display');
+      console.log('🔄 PaymentSuccess Auth State:', {
+        authenticated: userAuthenticated,
+        time: new Date().toISOString(),
+        path: window.location.pathname
+      });
+    });
 
-      // Complete the payment session (creates the central cleanup mechanism)
-      await completePayment(paymentSession?.orderId);
-    };
+    return () => unsubscribe();
+  }, []);
 
-    processPaymentCompletion();
-  }, [completePayment]); // Removed clearCart and paymentSession dependencies
+  // Handle payment completion after ensuring we have authentication stabilized
+  useEffect(() => {
+    // Only proceed if we've checked auth and user is still authenticated
+    if (!authLoading) {
+      let hasProcessed = false;
+      
+      const processPaymentCompletion = async () => {
+        if (hasProcessed) return;
+        hasProcessed = true;
+        
+        if (!isAuthenticated) {
+          console.log('⚠️ Payment completion delayed - user not authenticated during payment success load');
+          // Store that we have a pending payment to complete after login
+          sessionStorage.setItem('pendingPaymentCompletion', 'true');
+          sessionStorage.setItem('pendingPaymentPage', window.location.pathname);
+          return;
+        }
+        
+        // Don't clear cart here - wait until user clicks "Continue Shopping"
+        // This allows us to show the purchased items and amount on the success page
+        console.log('🎉 Payment completed - cart preserved for display');
+
+        // Complete the payment session (creates the central cleanup mechanism)
+        await completePayment(paymentSession?.orderId);
+      };
+
+      processPaymentCompletion();
+    }
+  }, [completePayment, paymentSession?.orderId, authLoading, isAuthenticated]);
 
   // Handle session restoration on component mount
   useEffect(() => {
@@ -96,6 +128,24 @@ const PaymentSuccess = () => {
 
   // Access current cart for fallback (in case payment session is missing)
   const { cartItems: currentCartItems, calculateTotal } = useCart();
+  
+  // Additional check for authentication in middle of page
+  useEffect(() => {
+    // If auth state changes and we become authenticated, check for pending payments
+    if (isAuthenticated) {
+      const hasPendingPayment = sessionStorage.getItem('pendingPaymentCompletion') === 'true';
+      if (hasPendingPayment) {
+        console.log('✅ User authenticated after payment, completing payment flow');
+        sessionStorage.removeItem('pendingPaymentCompletion');
+        setTimeout(() => {
+          completePayment(paymentSession?.orderId);
+        }, 500);
+      }
+      
+      // Clear any old values
+      sessionStorage.removeItem('postLoginRedirect');
+    }
+  }, [isAuthenticated, completePayment, paymentSession?.orderId]);
   
   // Calculate current total as fallback
   const currentTotal = calculateTotal() + 1; // Add delivery fee

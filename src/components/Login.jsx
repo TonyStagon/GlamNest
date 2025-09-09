@@ -42,8 +42,14 @@ function Login({ setShowLogin }) {
         await signInWithEmailAndPassword(auth, email, password);
         setShowLogin(false);
         
+        // Check for stored redirect destination after successful login
+        const postLoginRedirect = sessionStorage.getItem('postLoginRedirect');
+        if (postLoginRedirect) {
+          sessionStorage.removeItem('postLoginRedirect');
+          navigate(postLoginRedirect);
+        }
         // Check for admin credentials and redirect to admin dashboard
-        if (email === import.meta.env.VITE_ADMIN_EMAIL && password === import.meta.env.VITE_ADMIN_PASSWORD) {
+        else if (email === import.meta.env.VITE_ADMIN_EMAIL && password === import.meta.env.VITE_ADMIN_PASSWORD) {
           navigate('/admin');
         } else {
           navigate('/');

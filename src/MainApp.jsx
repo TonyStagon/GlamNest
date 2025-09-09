@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import AdminDashboard from './components/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import AuthProtectedRoute from './components/AuthProtectedRoute';
 import EditProduct from './components/EditProduct';
 import { CartProvider } from './contexts/CartContext';
 import Navbar from './components/Navbar';
@@ -13,7 +14,8 @@ import Shop from './pages/Shop';
 import Login from './components/Login';
 import PaymentCancelled from './components/PaymentCancelled';
 import PaymentFailed from './components/PaymentFailed';
-import PaymentSuccess from './components/PaymentSuccess'; // Import the payment success component
+import PaymentSuccess from './components/PaymentSuccess';
+import Account from './components/Account'; // Import the Account component
 
 function MainApp() {
   const location = useLocation();
@@ -63,10 +65,17 @@ function MainApp() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/login" element={<Login setShowLogin={setShowLogin} />} />
           
-          {/* Payment result routes - ADD THESE */}
+          {/* Payment result routes */}
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-cancelled" element={<PaymentCancelled />} />
           <Route path="/payment-failed" element={<PaymentFailed />} />
+          
+          {/* Account route */}
+          <Route path="/account" element={
+            <AuthProtectedRoute>
+              <Account />
+            </AuthProtectedRoute>
+          } />
           
           <Route path="/admin" element={
             <ProtectedRoute>

@@ -26,22 +26,35 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+    position: relative;
 }
 
-.profile-icon {
+.profile-icon-clickable {
     position: relative;
     margin-right: 15px;
     cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.profile-icon svg {
+.profile-icon-clickable:hover,
+.profile-icon-clickable:focus {
+    background-color: #f5f5f5;
+    color: #646cff;
+}
+
+.profile-icon-clickable svg {
     width: 24px;
     height: 24px;
     color: inherit;
     transition: all 0.3s ease;
 }
 
-.profile-icon:hover svg {
+.profile-icon-clickable:hover svg {
     color: #646cff;
 }
 
@@ -50,6 +63,17 @@
     font-size: 14px;
     font-weight: 500;
     color: #333;
+    .accessibility-text {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+    }
 }
 
 .profile-dot {
