@@ -7,12 +7,19 @@ import './PaymentForm.css';
 // Get API base URL from environment or fallback to production URL
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://yoco-api-u7hp.onrender.com';
 
+/**
+ * PaymentForm component for handling Yoco payment integration
+ * @param {object} props
+ * @param {number} props.amount - Amount to charge in Rands
+ * @param {(provider: string) => void} [props.onSuccess] - Callback function for successful payment initiation
+ * @returns {import('react').ReactElement}
+ */
 export const PaymentForm = ({ amount, onSuccess }) => {
   const navigate = useNavigate();
   
   const [isProcessing, setIsProcessing] = useState(false);
-  const [error, setError] = useState(null);
-  const [checkoutId, setCheckoutId] = useState(null);
+  const [error, setError] = useState(/** @type {string|null} */ (null));
+  const [checkoutId, setCheckoutId] = useState(/** @type {string|null} */ (null));
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
 
