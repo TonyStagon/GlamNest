@@ -1,38 +1,19 @@
-/**
- * Yoco payment form component using the new Checkout API
- * @param {Object} props - Component properties
- * @param {number} props.amount - Payment amount in ZAR (South African Rand)
- * @param {Function} [props.onSuccess] - Callback function called when payment is successfully initiated
- */
-// @ts-check
-"use strict";
+// src/components/PaymentForm.jsx - Updated for production
 import { useState, useEffect } from 'react';
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
-
 import './PaymentForm.css';
 
-/**
- * @param {Object} props
- * @param {number} props.amount
- * @param {function(string): void} [props.onSuccess] - Callback function called when checkout is successfully created, receives payment method type
- */
+// Get API base URL from environment or fallback to production URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://yoco-api-u7hp.onrender.com';
+
 export const PaymentForm = ({ amount, onSuccess }) => {
   const navigate = useNavigate();
   
-  /** @type {[boolean, (value: boolean) => void]} */
   const [isProcessing, setIsProcessing] = useState(false);
-  
-  /** @type {[string|null, (error: string|null) => void]} */
-  const [error, setError] = useState(/** @type {string|null} */ (null));
-  
-  /** @type {[string|null, (id: string|null) => void]} */
-  const [checkoutId, setCheckoutId] = useState(/** @type {string|null} */ (null));
-  
-  /** @type {[boolean, (value: boolean) => void]} */
+  const [error, setError] = useState(null);
+  const [checkoutId, setCheckoutId] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
-  /** @type {[boolean, (value: boolean) => void]} */
   const [authLoading, setAuthLoading] = useState(true);
 
   // Check authentication status
@@ -51,7 +32,6 @@ export const PaymentForm = ({ amount, onSuccess }) => {
     return unsubscribe;
   }, []);
 
-  // Additional real-time auth check before payment
   const checkCurrentAuthStatus = () => {
     const currentUser = auth.currentUser;
     const isCurrentlyAuth = !!currentUser;
@@ -63,7 +43,6 @@ export const PaymentForm = ({ amount, onSuccess }) => {
   };
 
   const handleYocoCheckout = async () => {
-    // Double-check authentication status in real-time
     const currentlyAuthenticated = checkCurrentAuthStatus();
     
     if (!isAuthenticated || !currentlyAuthenticated) {
@@ -73,10 +52,8 @@ export const PaymentForm = ({ amount, onSuccess }) => {
         currentAuth: currentlyAuthenticated
       });
       
-      // Update state to reflect current status
       setIsAuthenticated(false);
       
-      // Redirect to login page after a short delay
       setTimeout(() => {
         navigate('/login');
       }, 2000);
@@ -90,16 +67,18 @@ export const PaymentForm = ({ amount, onSuccess }) => {
       amount: amount,
       formattedAmount: amount.toLocaleString('en-ZA', {style: 'currency', currency: 'ZAR'}),
       currency: 'ZAR',
-      userAuthenticated: isAuthenticated
+      userAuthenticated: isAuthenticated,
+      apiUrl: API_BASE_URL
     });
 
     try {
-      // 1. Create checkout session
-      // Note the full backend URL (must match your server base URL)
-      // Use Vite proxy path (/api gets rewritten to localhost:5000)
-      const response = await fetch('/api/checkout/create', {
+      // Create checkout session using production API URL
+      const response = await fetch(`${API_BASE_URL}/checkout/create`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify({
           amount: Math.round(amount * 100), // Convert Rands to cents
           currency: 'ZAR'
@@ -107,7 +86,11 @@ export const PaymentForm = ({ amount, onSuccess }) => {
       });
 
       const data = await response.json();
-      console.log('📡 Checkout response:', { status: response.status, data });
+      console.log('📡 Checkout response:', { 
+        status: response.status, 
+        data,
+        url: `${API_BASE_URL}/checkout/create`
+      });
       
       if (!response.ok) {
         throw new Error(data.error || `HTTP ${response.status}: ${response.statusText}`);
@@ -121,12 +104,11 @@ export const PaymentForm = ({ amount, onSuccess }) => {
         
         setCheckoutId(data.checkoutId);
         
-        // 2. Call onSuccess callback with Yoco as payment method
         if (onSuccess) {
           onSuccess('yoco');
         }
         
-        // 3. Redirect to Yoco checkout page
+        // Redirect to Yoco checkout page
         window.location.href = data.redirectUrl;
       } else {
         throw new Error('Failed to create checkout session');
@@ -143,7 +125,7 @@ export const PaymentForm = ({ amount, onSuccess }) => {
     if (!checkoutId) return;
     
     try {
-      const response = await fetch(`/api/checkout/status/${checkoutId}`);
+      const response = await fetch(`${API_BASE_URL}/checkout/status/${checkoutId}`);
       const data = await response.json();
       
       console.log('📊 Payment status:', data);
@@ -295,6 +277,7 @@ export const PaymentForm = ({ amount, onSuccess }) => {
           fontSize: '12px'
         }}>
           <strong>🔧 Development Info:</strong><br />
+          API URL: {API_BASE_URL}<br />
           Checkout ID: {checkoutId || 'Not created yet'}<br />
           Amount: R{amount} ({amount * 100} cents)<br />
           Status: {isProcessing ? 'Processing' : 'Ready'}
