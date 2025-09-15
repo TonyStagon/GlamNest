@@ -131,6 +131,34 @@ const Checkout = () => {
       
       console.log('Order saved with ID:', orderRef.id, 'Order number:', orderNumber);
       
+      // Send order confirmation email
+      try {
+        const emailResponse = await fetch('http://localhost:5000/send-confirmation-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            customerEmail: formData.contact.email,
+            orderNumber: orderNumber,
+            customerName: `${formData.shipping.firstName} ${formData.shipping.lastName}`,
+            items: cartItems,
+            totalAmount: calculateTotal(),
+            shippingAddress: formData.shipping,
+            paymentMethod: orderData.paymentMethod
+          })
+        });
+        
+        const emailResult = await emailResponse.json();
+        if (emailResult.success) {
+          console.log('✅ Confirmation email sent successfully:', emailResult.emailId);
+        } else {
+          console.warn('⚠️ Email sending failed:', emailResult.error);
+        }
+      } catch (emailError) {
+        console.error('❌ Email sending request failed:', emailError);
+      }
+      
       // Start payment session with centralized session management
       const sessionStarted = paymentFlow.startPaymentSession({
         amount: calculateTotal(),
